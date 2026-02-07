@@ -282,7 +282,17 @@
     window.addEventListener('load', () => {
         renderHistory();
         window.updateUnits();
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) window.toggleDarkMode();
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // Only toggle if not already in dark mode to avoid double toggling
+            if (!document.documentElement.classList.contains('dark')) window.toggleDarkMode();
+        }
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(() => console.log('AI Calc Service Worker Registered'))
+                .catch(err => console.log('SW Registration Failed', err));
+        }
     });
 
     document.addEventListener('keydown', (e) => {
