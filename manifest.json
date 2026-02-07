@@ -5,9 +5,10 @@
   "description": "Professional Scientific Suite with Neural Solving Logic",
   "start_url": "index.html",
   "display": "standalone",
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
   "background_color": "#020617",
   "theme_color": "#4f46e5",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "logo.png",
