@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s;
+    touch-action: manipulation;
+}
+
+.calc-btn {
+    @apply flex items-center justify-center rounded-2xl transition-all duration-150 active:scale-90 text-lg font-semibold h-14 md:h-16;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-number {
+    @apply bg-white hover:bg-gray-100 text-gray-800 shadow-sm border border-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white dark:border-gray-700;
+}
+
+.btn-operator {
+    @apply bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:text-indigo-300 dark:hover:bg-indigo-900/50;
+}
+
+.btn-action {
+    @apply bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-900/30 dark:text-rose-300 dark:hover:bg-rose-900/50;
+}
+
+.btn-equals {
+    @apply bg-gradient-to-br from-indigo-600 to-violet-700 text-white hover:opacity-90 shadow-lg shadow-indigo-200 dark:shadow-none;
+}
+
+.glass-panel {
+    @apply bg-white/80 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-200 dark:border-gray-800 rounded-[2.5rem] shadow-2xl overflow-hidden;
+}
+
+.display-screen {
+    @apply p-8 flex flex-col items-end justify-end bg-gradient-to-b from-transparent to-gray-50/50 dark:to-gray-950/30 min-h-[120px] md:min-h-[160px] text-right;
+}
+
+.tab-btn.active {
+    @apply bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.main-wrapper {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    padding-bottom: var(--safe-area-inset-bottom);
+}
+
+.glow {
+    position: fixed;
+    width: 40vw;
+    height: 40vw;
+    filter: blur(100px);
+    z-index: -1;
+    opacity: 0.15;
+    border-radius: 50%;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

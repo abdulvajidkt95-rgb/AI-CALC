@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI Calc - Smart Scientific Application</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#020617">
+</head>
+
+<body class="bg-[#F8FAFC] dark:bg-[#020617] text-slate-900 dark:text-slate-100">
+
+    <div class="glow bg-indigo-500 top-[-10%] left-[-10%]"></div>
+    <div class="glow bg-violet-500 bottom-[-10%] right-[-10%]"></div>
+
+    <div class="main-wrapper flex items-center justify-center p-4 md:p-8">
+        <div class="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+
+            <!-- Navigation -->
+            <div class="lg:col-span-3 order-2 lg:order-1 flex flex-col gap-6">
+                <div class="hidden lg:flex items-center gap-3 px-2">
+                    <div class="w-12 h-12 rounded-xl overflow-hidden shadow-lg border border-indigo-500/30">
+                        <img src="logo.png" alt="AI Calc Logo" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-2xl tracking-tight">AI Calc</h1>
+                        <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-indigo-500">Intelligent
+                            Computation</p>
+                    </div>
+                </div>
+
+                <div class="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible no-scrollbar p-1">
+                    <button onclick="window.switchTab('scientific')" id="tab-scientific"
+                        class="tab-btn active flex-1 lg:flex-none flex items-center gap-4 px-5 py-4 rounded-2xl transition-all">
+                        <i class="fas fa-square-root-variable"></i>
+                        <span class="text-sm font-bold whitespace-nowrap">Scientific</span>
+                    </button>
+                    <button onclick="window.switchTab('physics')" id="tab-physics"
+                        class="tab-btn flex-1 lg:flex-none flex items-center gap-4 px-5 py-4 rounded-2xl bg-white dark:bg-gray-900/50 text-slate-500 transition-all">
+                        <i class="fas fa-atom"></i>
+                        <span class="text-sm font-bold whitespace-nowrap">Physics (γ/η)</span>
+                    </button>
+                    <button onclick="window.switchTab('converter')" id="tab-converter"
+                        class="tab-btn flex-1 lg:flex-none flex items-center gap-4 px-5 py-4 rounded-2xl bg-white dark:bg-gray-900/50 text-slate-500 transition-all">
+                        <i class="fas fa-arrows-rotate"></i>
+                        <span class="text-sm font-bold whitespace-nowrap">Converter</span>
+                    </button>
+                    <button onclick="window.switchTab('ai')" id="tab-ai"
+                        class="tab-btn flex-1 lg:flex-none flex items-center gap-4 px-5 py-4 rounded-2xl bg-white dark:bg-gray-900/50 text-slate-500 transition-all">
+                        <i class="fas fa-robot"></i>
+                        <span class="text-sm font-bold whitespace-nowrap">Neural AI</span>
+                    </button>
+                </div>
+
+                <button onclick="window.toggleDarkMode()"
+                    class="mt-auto hidden lg:flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-gray-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <span class="font-bold text-sm" id="mode-text">Dark Mode</span>
+                    <i id="theme-icon-desktop" class="fas fa-moon text-indigo-500"></i>
+                </button>
+            </div>
+
+            <!-- Main Display Area -->
+            <div class="lg:col-span-6 order-1 lg:order-2 glass-panel flex flex-col">
+                <div
+                    class="lg:hidden flex justify-between items-center px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <div class="w-10 h-10 rounded-lg overflow-hidden border border-indigo-500/30">
+                            <img src="logo.png" alt="AI Calc Logo" class="w-full h-full object-cover">
+                        </div>
+                        <span class="font-black text-xl tracking-tight">AI Calc</span>
+                    </div>
+                    <button onclick="window.toggleDarkMode()"
+                        class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                        <i id="theme-icon-mobile" class="fas fa-moon"></i>
+                    </button>
+                </div>
+
+                <!-- Shared Screen -->
+                <div class="display-screen">
+                    <div id="prev-operation"
+                        class="text-sm md:text-base font-medium text-slate-400 dark:text-slate-500 mb-2 h-6 tracking-wide">
+                    </div>
+                    <div id="current-value"
+                        class="text-5xl md:text-6xl font-extrabold dark:text-white truncate w-full tracking-tighter">0
+                    </div>
+                </div>
+
+                <!-- TAB: Scientific -->
+                <div id="panel-scientific" class="p-6 md:p-8 grid grid-cols-4 gap-3 md:gap-4">
+                    <button onclick="window.clearAll()" class="calc-btn btn-action">AC</button>
+                    <button onclick="window.deleteLast()" class="calc-btn btn-action"><i
+                            class="fas fa-backspace"></i></button>
+                    <button onclick="window.appendOperator('%')" class="calc-btn btn-operator">%</button>
+                    <button onclick="window.appendOperator('/')" class="calc-btn btn-operator">÷</button>
+                    <button onclick="window.mathFunc('sin')" class="calc-btn btn-operator text-xs">SIN</button>
+                    <button onclick="window.mathFunc('cos')" class="calc-btn btn-operator text-xs">COS</button>
+                    <button onclick="window.mathFunc('tan')" class="calc-btn btn-operator text-xs">TAN</button>
+                    <button onclick="window.appendOperator('*')" class="calc-btn btn-operator">×</button>
+                    <button onclick="window.appendNumber('7')" class="calc-btn btn-number">7</button>
+                    <button onclick="window.appendNumber('8')" class="calc-btn btn-number">8</button>
+                    <button onclick="window.appendNumber('9')" class="calc-btn btn-number">9</button>
+                    <button onclick="window.appendOperator('-')" class="calc-btn btn-operator">−</button>
+                    <button onclick="window.appendNumber('4')" class="calc-btn btn-number">4</button>
+                    <button onclick="window.appendNumber('5')" class="calc-btn btn-number">5</button>
+                    <button onclick="window.appendNumber('6')" class="calc-btn btn-number">6</button>
+                    <button onclick="window.appendOperator('+')" class="calc-btn btn-operator">+</button>
+                    <button onclick="window.appendNumber('1')" class="calc-btn btn-number">1</button>
+                    <button onclick="window.appendNumber('2')" class="calc-btn btn-number">2</button>
+                    <button onclick="window.appendNumber('3')" class="calc-btn btn-number">3</button>
+                    <button onclick="window.mathFunc('sqrt')" class="calc-btn btn-operator"><i
+                            class="fas fa-square-root-alt"></i></button>
+                    <button onclick="window.appendNumber('0')" class="calc-btn btn-number col-span-2">0</button>
+                    <button onclick="window.appendNumber('.')" class="calc-btn btn-number">.</button>
+                    <button onclick="window.calculate()" class="calc-btn btn-equals">=</button>
+                </div>
+
+                <!-- TAB: Physics -->
+                <div id="panel-physics" class="hidden p-6 md:p-8 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div
+                            class="bg-slate-50 dark:bg-gray-950/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
+                            <label class="text-[10px] font-black text-indigo-500 uppercase block mb-2">Relativity: Gamma
+                                (γ)</label>
+                            <div class="flex gap-2">
+                                <div class="relative flex-1">
+                                    <input type="number" id="phys-v" placeholder="Velocity (m/s)"
+                                        class="w-full p-3 rounded-xl bg-white dark:bg-gray-900 border-none focus:ring-2 ring-indigo-500 outline-none text-sm font-bold">
+                                    <span
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400">m/s</span>
+                                </div>
+                                <button onclick="window.calcGamma()"
+                                    class="px-4 bg-indigo-600 text-white rounded-xl font-bold text-xs">γ</button>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-slate-50 dark:bg-gray-950/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
+                            <label class="text-[10px] font-black text-indigo-500 uppercase block mb-2">Efficiency: Eta
+                                (η)</label>
+                            <div class="flex gap-2">
+                                <input type="number" id="phys-win" placeholder="W-in"
+                                    class="w-full p-3 rounded-xl bg-white dark:bg-gray-900 border-none text-sm font-bold">
+                                <input type="number" id="phys-wout" placeholder="W-out"
+                                    class="w-full p-3 rounded-xl bg-white dark:bg-gray-900 border-none text-sm font-bold">
+                                <button onclick="window.calcEta()"
+                                    class="px-4 bg-indigo-600 text-white rounded-xl font-bold text-xs">η</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3">
+                        <button onclick="window.setPhysMode('ke')"
+                            class="p-3 rounded-xl bg-slate-100 dark:bg-gray-800 text-[10px] font-bold uppercase hover:bg-indigo-500 hover:text-white transition-all">Kinetic
+                            Energy</button>
+                        <button onclick="window.setPhysMode('force')"
+                            class="p-3 rounded-xl bg-slate-100 dark:bg-gray-800 text-[10px] font-bold uppercase hover:bg-indigo-500 hover:text-white transition-all">Force
+                            (F=ma)</button>
+                        <button onclick="window.setPhysMode('wave')"
+                            class="p-3 rounded-xl bg-slate-100 dark:bg-gray-800 text-[10px] font-bold uppercase hover:bg-indigo-500 hover:text-white transition-all">Wavelength</button>
+                    </div>
+
+                    <div id="phys-input-area" class="bg-indigo-600 p-6 rounded-[2rem] text-white hidden">
+                        <h4 id="phys-title" class="text-xs font-black uppercase tracking-widest mb-4 opacity-70">
+                            Calculation</h4>
+                        <div id="phys-fields" class="space-y-4"></div>
+                        <button onclick="window.executePhysics()"
+                            class="w-full mt-4 py-3 bg-white text-indigo-600 rounded-xl font-black uppercase text-xs shadow-xl">Solve</button>
+                    </div>
+                </div>
+
+                <!-- TAB: Converter -->
+                <div id="panel-converter" class="hidden p-8 space-y-6">
+                    <select id="conv-cat" onchange="window.updateUnits()"
+                        class="w-full p-4 rounded-2xl bg-slate-50 dark:bg-gray-950 border border-slate-200 dark:border-slate-800 font-bold outline-none">
+                        <option value="length">Length</option>
+                        <option value="weight">Weight</option>
+                        <option value="energy">Energy (J/eV)</option>
+                    </select>
+                    <div class="space-y-4">
+                        <div class="relative">
+                            <input type="number" id="c-input" value="1" oninput="window.runConv()"
+                                class="w-full p-6 pt-10 rounded-3xl bg-slate-100 dark:bg-gray-950 text-3xl font-black border-none focus:ring-2 ring-indigo-500">
+                            <select id="c-from" onchange="window.runConv()"
+                                class="absolute top-4 left-6 text-[10px] font-black uppercase text-indigo-500 bg-transparent border-none"></select>
+                        </div>
+                        <div class="relative">
+                            <div id="c-output"
+                                class="w-full p-6 pt-10 rounded-3xl bg-indigo-600 text-white text-3xl font-black">1
+                            </div>
+                            <select id="c-to" onchange="window.runConv()"
+                                class="absolute top-4 left-6 text-[10px] font-black uppercase text-indigo-200 bg-transparent border-none"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: AI Analyzer -->
+                <div id="panel-ai" class="hidden p-6 md:p-8 space-y-8 flex-1 flex flex-col overflow-hidden">
+                    <!-- Terminal Input -->
+                    <div class="relative group">
+                        <div
+                            class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200">
+                        </div>
+                        <div class="relative bg-white dark:bg-gray-950 rounded-[2rem] p-2 flex gap-2">
+                            <input id="aiQ" placeholder="Solve: Find force for 10kg at 5m/s² or deriv(x^2)"
+                                class="flex-1 bg-transparent p-4 rounded-2xl font-bold text-slate-800 dark:text-white outline-none placeholder-slate-400">
+                            <button onclick="window.neuralProcess()"
+                                class="bg-indigo-600 hover:bg-indigo-500 text-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-200 dark:shadow-none transition-all active:scale-90">
+                                <i class="fas fa-microchip text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Progress Indicator (Hidden by default) -->
+                    <div id="neural-loader" class="hidden flex items-center justify-center gap-2 py-4">
+                        <div class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce"></div>
+                        <div class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce [animation-delay:-0.1s]">
+                        </div>
+                        <div class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce [animation-delay:-0.2s]">
+                        </div>
+                        <span class="text-[10px] font-black uppercase text-indigo-500 tracking-widest ml-2">Processing
+                            Neural Path...</span>
+                    </div>
+
+                    <!-- Solution Container -->
+                    <div id="aiRes-container" class="flex-1 overflow-y-auto no-scrollbar hidden">
+                        <div
+                            class="bg-slate-50 dark:bg-gray-900/40 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-inner">
+                            <div
+                                class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-100/30 dark:bg-gray-800/20">
+                                <span class="text-[10px] font-black uppercase tracking-widest text-indigo-500">The
+                                    Perfect Path</span>
+                                <i class="fas fa-check-circle text-emerald-500"></i>
+                            </div>
+                            <div id="aiRes-path" class="p-8 space-y-6 font-medium text-slate-600 dark:text-slate-300">
+                                <!-- Step-by-step content -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Default View -->
+                    <div id="ai-default-view"
+                        class="flex-1 flex flex-col items-center justify-center text-center p-10 opacity-40">
+                        <div
+                            class="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-6">
+                            <i class="fas fa-brain text-3xl"></i>
+                        </div>
+                        <p class="text-xs font-bold uppercase tracking-widest max-w-[200px]">Neural Intelligence Ready
+                            to Solve Any Physics or Maths Problem</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Sidebar -->
+            <div class="lg:col-span-3 order-3 glass-panel flex flex-col h-[400px] lg:h-auto">
+                <div
+                    class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-inherit">
+                    <h3 class="font-extrabold text-sm flex items-center gap-2"><i
+                            class="fas fa-history text-indigo-500"></i> Records</h3>
+                    <button onclick="window.clearHistory()"
+                        class="text-[10px] font-black text-rose-500 uppercase">Clear</button>
+                </div>
+                <div id="history-list" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
