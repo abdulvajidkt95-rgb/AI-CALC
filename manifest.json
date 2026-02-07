@@ -1,15 +1,24 @@
 {
-  "name": "AI Calc",
+  "name": "AI Calc Professional",
   "short_name": "AI Calc",
+  "name_localized": "AI Calc Official",
+  "description": "Professional Scientific Suite with Neural Solving Logic",
   "start_url": "index.html",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#020617",
   "theme_color": "#4f46e5",
   "icons": [
     {
       "src": "logo.png",
-      "sizes": "1024x1024",
-      "type": "image/png"
+      "sizes": "192x192 512x512 1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
+  ],
+  "categories": [
+    "utilities",
+    "education",
+    "productivity"
   ]
 }
