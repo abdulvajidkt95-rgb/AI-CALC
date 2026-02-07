@@ -1,36 +1,37 @@
 {
-  "name": "AI Calc Professional",
+  "name": "AI Calc – Smart Scientific Calculator",
   "short_name": "AI Calc",
-  "name_localized": "AI Calc Official",
-  "description": "A high-performance scientific suite with neural solving capabilities for mathematics and physics.",
-  "start_url": "./index.html",
+  "description": "AI Calc is a smart calculator for maths, physics analysis, and unit conversion.",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#020617",
-  "theme_color": "#4f46e5",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "lang": "en",
   "dir": "ltr",
   "prefer_related_applications": false,
   "icons": [
     {
       "src": "logo.png",
-      "sizes": "192x192 512x512 1024x1024",
+      "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
     }
   ],
   "categories": [
     "utilities",
-    "education",
-    "productivity"
-  ],
-  "screenshots": [
-    {
-      "src": "logo.png",
-      "sizes": "1024x1024",
-      "type": "image/png",
-      "form_factor": "wide"
-    }
+    "education"
   ]
 }
